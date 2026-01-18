@@ -3,6 +3,7 @@ from fastapi import FastAPI, HTTPException, Depends
 from pydantic import BaseModel, Field
 from typing import List, Optional
 import torch
+from contextlib import asynccontextmanager
 
 from src.config import get_settings, Settings
 from src.models import SASRec
@@ -72,19 +73,12 @@ def get_recommendation_service() -> RecommendationService:
     return recommendation_service
 
 
-# Create FastAPI app
-app = FastAPI(
-    title="Privacy-First Session-Based Recommendation API",
-    description="Real-time recommendation system for anonymous users",
-    version="1.0.0"
-)
-
-
-@app.on_event("startup")
-async def startup_event():
-    """Initialize services on startup."""
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    """Lifespan context manager for startup and shutdown events."""
     global recommendation_service
     
+    # Startup
     settings = get_settings()
     
     # Create sample item catalog
@@ -138,6 +132,20 @@ async def startup_event():
     )
     
     print("✓ Recommendation service initialized successfully")
+    
+    yield
+    
+    # Shutdown (cleanup if needed)
+    print("✓ Recommendation service shutdown")
+
+
+# Create FastAPI app with lifespan
+app = FastAPI(
+    title="Privacy-First Session-Based Recommendation API",
+    description="Real-time recommendation system for anonymous users",
+    version="1.0.0",
+    lifespan=lifespan
+)
 
 
 @app.post("/api/v1/click", response_model=dict)
