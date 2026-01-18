@@ -150,8 +150,7 @@ class SASRec(nn.Module):
         Returns:
             Causal mask tensor of shape (seq_len, seq_len)
         """
-        mask = torch.triu(torch.ones(seq_len, seq_len, device=device), diagonal=1)
-        mask = mask.bool()
-        mask = mask.masked_fill(mask == 1, float("-inf"))
-        mask = mask.masked_fill(mask == 0, float(0.0))
+        mask = torch.triu(
+            torch.full((seq_len, seq_len), float("-inf"), device=device), diagonal=1
+        )
         return mask
