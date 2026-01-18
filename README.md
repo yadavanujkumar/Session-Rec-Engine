@@ -278,6 +278,31 @@ pytest tests/test_models.py -v
 pytest tests/ --cov=src --cov-report=html
 ```
 
+## 🎓 Training the Model
+
+The system includes a training script for the SASRec model. You can train on synthetic data or your own session data:
+
+```bash
+# Train with default settings (synthetic data)
+python train.py
+
+# Train with custom parameters
+python train.py --num-items 200 --num-sequences 5000 --batch-size 64 --num-epochs 20
+
+# Save to specific location
+python train.py --output models/my_model.pth
+```
+
+**Training Parameters:**
+- `--num-items`: Number of items in catalog (default: 100)
+- `--num-sequences`: Number of training sequences (default: 1000)
+- `--batch-size`: Training batch size (default: 32)
+- `--num-epochs`: Number of training epochs (default: 10)
+- `--learning-rate`: Learning rate (default: 0.001)
+- `--output`: Path to save trained model (default: model.pth)
+
+The training script generates synthetic session data with temporal correlation to simulate realistic user behavior patterns.
+
 ## 🔧 Configuration
 
 Configuration is managed through environment variables or `.env` file:
