@@ -6,6 +6,12 @@ from functools import lru_cache
 class Settings(BaseSettings):
     """Application settings."""
     
+    model_config = {
+        "env_file": ".env",
+        "case_sensitive": False,
+        "protected_namespaces": ()
+    }
+    
     # Redis Configuration
     redis_host: str = "localhost"
     redis_port: int = 6379
@@ -32,10 +38,6 @@ class Settings(BaseSettings):
     # Server Configuration
     api_host: str = "0.0.0.0"
     api_port: int = 8000
-    
-    class Config:
-        env_file = ".env"
-        case_sensitive = False
 
 
 @lru_cache()

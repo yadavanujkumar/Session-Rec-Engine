@@ -2,11 +2,11 @@
 import torch
 import numpy as np
 from typing import List, Optional, Tuple
-from ..models import SASRec
-from ..storage import SessionStore, VectorStore
-from ..coldstart import ColdStartHandler
-from ..monitoring import MetricsTracker, LatencyTimer
-from ..utils import ItemCatalog
+from src.models import SASRec
+from src.storage import SessionStore, VectorStore
+from src.coldstart import ColdStartHandler
+from src.monitoring import MetricsTracker, LatencyTimer
+from src.utils import ItemCatalog
 
 
 class RecommendationService:

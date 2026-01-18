@@ -4,13 +4,13 @@ from pydantic import BaseModel, Field
 from typing import List, Optional
 import torch
 
-from ..config import get_settings, Settings
-from ..models import SASRec
-from ..storage import SessionStore, VectorStore
-from ..coldstart import ThompsonSamplingBandit, ColdStartHandler
-from ..monitoring import MetricsTracker
-from ..utils import ItemCatalog
-from ..service import RecommendationService
+from src.config import get_settings, Settings
+from src.models import SASRec
+from src.storage import SessionStore, VectorStore
+from src.coldstart import ThompsonSamplingBandit, ColdStartHandler
+from src.monitoring import MetricsTracker
+from src.utils import ItemCatalog
+from src.service import RecommendationService
 
 
 # Request/Response models
@@ -42,6 +42,8 @@ class FeedbackEvent(BaseModel):
 
 class MetricsResponse(BaseModel):
     """Metrics response."""
+    model_config = {"protected_namespaces": ()}
+    
     hit_rate_at_10: float
     p99_latency_ms: float
     p50_latency_ms: float
