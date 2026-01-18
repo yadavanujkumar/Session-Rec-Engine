@@ -5,9 +5,9 @@ pydantic==2.5.3
 pydantic-settings==2.1.0
 
 # Deep Learning
-torch==2.1.2
+torch==2.5.1
 transformers==4.36.2
-numpy==1.24.3
+numpy==1.26.4
 
 # Data Storage & Caching
 redis==5.0.1

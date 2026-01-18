@@ -57,6 +57,30 @@ class MetricsTracker:
             else:
                 self.model_requests += 1
     
+    def _calculate_hit_rate(self) -> float:
+        """Calculate hit rate without lock (internal use only)."""
+        if not self.hit_events:
+            return 0.0
+        return (sum(self.hit_events) / len(self.hit_events)) * 100
+    
+    def _calculate_p99_latency(self) -> float:
+        """Calculate P99 latency without lock (internal use only)."""
+        if not self.latencies:
+            return 0.0
+        return float(np.percentile(list(self.latencies), 99))
+    
+    def _calculate_average_latency(self) -> float:
+        """Calculate average latency without lock (internal use only)."""
+        if not self.latencies:
+            return 0.0
+        return float(np.mean(list(self.latencies)))
+    
+    def _calculate_p50_latency(self) -> float:
+        """Calculate P50 latency without lock (internal use only)."""
+        if not self.latencies:
+            return 0.0
+        return float(np.percentile(list(self.latencies), 50))
+    
     def get_hit_rate(self, k: int = 10) -> float:
         """
         Calculate Hit Rate@K.
@@ -68,9 +92,7 @@ class MetricsTracker:
             Hit rate as a percentage
         """
         with self.lock:
-            if not self.hit_events:
-                return 0.0
-            return (sum(self.hit_events) / len(self.hit_events)) * 100
+            return self._calculate_hit_rate()
     
     def get_p99_latency(self) -> float:
         """
@@ -80,9 +102,7 @@ class MetricsTracker:
             99th percentile latency in milliseconds
         """
         with self.lock:
-            if not self.latencies:
-                return 0.0
-            return float(np.percentile(list(self.latencies), 99))
+            return self._calculate_p99_latency()
     
     def get_average_latency(self) -> float:
         """
@@ -92,9 +112,7 @@ class MetricsTracker:
             Average latency in milliseconds
         """
         with self.lock:
-            if not self.latencies:
-                return 0.0
-            return float(np.mean(list(self.latencies)))
+            return self._calculate_average_latency()
     
     def get_p50_latency(self) -> float:
         """
@@ -104,9 +122,7 @@ class MetricsTracker:
             Median latency in milliseconds
         """
         with self.lock:
-            if not self.latencies:
-                return 0.0
-            return float(np.percentile(list(self.latencies), 50))
+            return self._calculate_p50_latency()
     
     def get_metrics_summary(self) -> Dict:
         """
@@ -117,10 +133,10 @@ class MetricsTracker:
         """
         with self.lock:
             return {
-                "hit_rate_at_10": round(self.get_hit_rate(10), 2),
-                "p99_latency_ms": round(self.get_p99_latency(), 2),
-                "p50_latency_ms": round(self.get_p50_latency(), 2),
-                "avg_latency_ms": round(self.get_average_latency(), 2),
+                "hit_rate_at_10": round(self._calculate_hit_rate(), 2),
+                "p99_latency_ms": round(self._calculate_p99_latency(), 2),
+                "p50_latency_ms": round(self._calculate_p50_latency(), 2),
+                "avg_latency_ms": round(self._calculate_average_latency(), 2),
                 "total_requests": self.total_requests,
                 "coldstart_requests": self.coldstart_requests,
                 "model_requests": self.model_requests,
