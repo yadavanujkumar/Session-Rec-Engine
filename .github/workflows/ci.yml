@@ -47,7 +47,7 @@ jobs:
     - name: Run linter
       run: |
         black --check src/ tests/
-        flake8 src/ tests/ --max-line-length=100 --exclude=venv
+        flake8 src/ tests/ --max-line-length=100 --exclude=venv --extend-ignore=E203
     
     - name: Run tests
       run: |
