@@ -37,8 +37,8 @@ venv.bak/
 # Environment
 .env
 
-# Model artifacts
-models/
+# Model artifacts (saved model files, not source code)
+/models/
 checkpoints/
 *.pth
 *.pt
