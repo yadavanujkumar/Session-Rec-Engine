@@ -1,17 +1,17 @@
 # Core Framework
-fastapi==0.109.0
+fastapi==0.109.1
 uvicorn[standard]==0.27.0
 pydantic==2.5.3
 pydantic-settings==2.1.0
 
 # Deep Learning
-torch==2.5.1
-transformers==4.36.2
+torch==2.6.0
+transformers==4.48.0
 numpy==1.26.4
 
 # Data Storage & Caching
 redis==5.0.1
-qdrant-client==1.7.0
+qdrant-client==1.9.0
 
 # Multi-Armed Bandit
 scipy==1.11.4
